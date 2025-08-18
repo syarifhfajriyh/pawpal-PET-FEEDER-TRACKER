@@ -4,6 +4,8 @@ import 'widgets/Login.dart';
 import 'widgets/Scheduler.dart';
 import 'screens/ProfilePage.dart';
 import 'screens/HistoryPage.dart';
+import 'package:paw_ui/screens/HomePageAdmin.dart';
+
 
 void main() {
   runApp(const PawFeederApp());
@@ -149,22 +151,50 @@ class _RootState extends State<_Root> {
 
   @override
   Widget build(BuildContext context) {
-    // Optional admin view (kept from earlier flow)
-    if (_loggedIn && _isAdmin) {
-      return Scaffold(
-        appBar: AppBar(title: const Text('Admin Dashboard')),
-        body: Center(
-          child: ElevatedButton.icon(
-            onPressed: () => setState(() {
-              _loggedIn = false;
-              _isAdmin = false;
-            }),
-            icon: const Icon(Icons.logout),
-            label: const Text('Logout'),
-          ),
-        ),
+   // === ADMIN LANDING ===
+if (_loggedIn && _isAdmin) {
+  return HomePageAdmin(
+    adminName: 'Admin',
+    adminEmail: 'admin@pawpal.app',
+    totalUsers: 12,
+    devicesOnline: 8,
+    errors24h: 1,
+
+    // open profile editor (your existing ProfilePage)
+    onOpenProfile: () {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => const ProfilePage()),
       );
-    }
+    },
+
+    // admin actions (UI-only pages are defined inside HomePageAdmin.dart)
+    onOpenUserList: () {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => const AdminUserListPage()),
+      );
+    },
+    onOpenUserHistory: () {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => const AdminUserHistoryPage()),
+      );
+    },
+    onOpenUserStatus: () {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => const AdminUserStatusPage()),
+      );
+    },
+
+    onSignOut: () => setState(() {
+      _loggedIn = false;
+      _isAdmin = false;
+    }),
+  );
+}
+
 
     return HomePageView(
       // Empty state until “connected” (logged in)
