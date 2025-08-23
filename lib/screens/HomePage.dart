@@ -197,17 +197,19 @@ class HomePageView extends StatelessWidget {
       );
     }
 
-    // ---------- FAB ----------
-    final fab = FloatingActionButton.extended(
-      onPressed: onConnectDevice,
-      icon: const Icon(Icons.add),
-      label: const Text(
-        'Schedule',
-        style: TextStyle(fontWeight: FontWeight.w700),
-      ),
-      backgroundColor: const Color(0xFF0E2A47),
-      foregroundColor: const Color(0xFFFFC34D),
-    );
+// ---------- FAB ----------
+final fab = FloatingActionButton.extended(
+  onPressed: showEmptyState ? onConnectDevice : onSchedule,
+  icon: const Icon(Icons.add),
+  // NOTE: no `const` here so the label can be dynamic
+  label: Text(
+    showEmptyState ? 'PawFeeder' : 'Schedule',
+    style: const TextStyle(fontWeight: FontWeight.w700),
+  ),
+  backgroundColor: const Color(0xFF0E2A47),
+  foregroundColor: const Color(0xFFFFC34D),
+);
+
 
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
