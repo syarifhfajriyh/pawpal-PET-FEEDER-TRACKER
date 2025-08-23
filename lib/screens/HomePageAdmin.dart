@@ -50,9 +50,9 @@ class HomePageAdmin extends StatelessWidget {
           Image.asset("assets/logo.png", height: 36),
           const Spacer(),
           _TopMenuButtonAdmin(
-            onProfile: onOpenProfile,
-            onSignOut: onSignOut,
-          ),
+  onSignOut: onSignOut,
+),
+
         ],
       ),
     );
@@ -72,10 +72,11 @@ class HomePageAdmin extends StatelessWidget {
 
     // ----- PROFILE SECTION CARD -----
     final profileCard = Padding(
-      padding: const EdgeInsets.fromLTRB(16, 14, 16, 0),
-      child: Card(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        child: Padding(
+    padding: const EdgeInsets.fromLTRB(16, 14, 16, 0),
+    child: Card(
+    color: const Color(0xFFE3F2FD), // light blue surface ✅
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+    child: Padding(
           padding: const EdgeInsets.all(12),
           child: Row(
             children: [
@@ -84,9 +85,9 @@ class HomePageAdmin extends StatelessWidget {
                 backgroundImage: (avatarUrl != null && avatarUrl!.isNotEmpty)
                     ? NetworkImage(avatarUrl!)
                     : null,
-                backgroundColor: const Color(0xFF0E2A47).withOpacity(0.08),
+                backgroundColor: const Color(0xFF1565C0).withOpacity(0.08),
                 child: (avatarUrl == null || avatarUrl!.isEmpty)
-                    ? const Icon(Icons.admin_panel_settings, color: Color(0xFF0E2A47), size: 28)
+                    ? const Icon(Icons.admin_panel_settings, color: Color(0xFF1565C0), size: 28)
                     : null,
               ),
               const SizedBox(width: 12),
@@ -174,8 +175,10 @@ class HomePageAdmin extends StatelessWidget {
       onPressed: onOpenUserList,
       icon: const Icon(Icons.people),
       label: const Text('User List', style: TextStyle(fontWeight: FontWeight.w700)),
-      backgroundColor: const Color(0xFF0E2A47),
-      foregroundColor: const Color(0xFFFFC34D),
+      backgroundColor: const Color(0xFF1565C0),
+      foregroundColor: Colors.white,
+
+
     );
 
     return Scaffold(
@@ -200,9 +203,8 @@ class HomePageAdmin extends StatelessWidget {
 
 // ===== Top menu (Profile / Sign out) =====
 class _TopMenuButtonAdmin extends StatelessWidget {
-  const _TopMenuButtonAdmin({this.onProfile, this.onSignOut});
+  const _TopMenuButtonAdmin({this.onSignOut});
 
-  final VoidCallback? onProfile;
   final VoidCallback? onSignOut;
 
   @override
@@ -210,29 +212,14 @@ class _TopMenuButtonAdmin extends StatelessWidget {
     return PopupMenuButton<_AdminMenuAction>(
       icon: const Icon(Icons.menu),
       onSelected: (v) {
-        switch (v) {
-          case _AdminMenuAction.profile:
-            onProfile?.call();
-            break;
-          case _AdminMenuAction.signOut:
-            onSignOut?.call();
-            break;
-        }
+        if (v == _AdminMenuAction.signOut) onSignOut?.call();
       },
       itemBuilder: (ctx) => const [
-        PopupMenuItem(
-          value: _AdminMenuAction.profile,
-          child: ListTile(
-            leading: Icon(Icons.person),
-            title: Text("Profile"),
-          ),
-        ),
-        PopupMenuDivider(),
         PopupMenuItem(
           value: _AdminMenuAction.signOut,
           child: ListTile(
             leading: Icon(Icons.logout),
-            title: Text("Sign out"),
+            title: Text('Sign out'),
           ),
         ),
       ],
@@ -240,7 +227,8 @@ class _TopMenuButtonAdmin extends StatelessWidget {
   }
 }
 
-enum _AdminMenuAction { profile, signOut }
+enum _AdminMenuAction { signOut }
+
 
 // ===== Reusable cards (same look as Home) =====
 class _MetricCardAdmin extends StatelessWidget {
@@ -260,9 +248,11 @@ class _MetricCardAdmin extends StatelessWidget {
   Widget build(BuildContext context) {
     final text = Theme.of(context).textTheme;
     return Expanded(
-      child: Card(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        child: Padding(
+    child: Card(
+    color: const Color(0xFFE3F2FD), // light blue surface
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+    child: Padding(
+
           padding: const EdgeInsets.all(12),
           child: Row(
             children: [
@@ -309,7 +299,7 @@ class _ActionCardAdmin extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Card(
-        color: active ? const Color(0xFFffc34d) : Colors.white,
+        color: active ? const Color(0xFF90CAF9) : Colors.white, 
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         child: SizedBox(
           width: 100,
@@ -317,19 +307,19 @@ class _ActionCardAdmin extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(icon, color: active ? Colors.black : Colors.grey[800]),
+              Icon(icon, color: active ? Colors.white : Colors.grey[800]),
               const SizedBox(height: 8),
               Text(
                 title,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  color: active ? Colors.black : Colors.grey[800],
+                  color: active ? Colors.white : Colors.grey[800],
                 ),
               ),
               Text(
                 subtitle,
                 style: TextStyle(
-                  color: active ? Colors.black : Colors.grey[600],
+                  color: active ? Colors.white : Colors.grey[600],
                 ),
               ),
             ],
