@@ -47,12 +47,9 @@ class HomePageAdmin extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(16, 28, 8, 12),
       child: Row(
         children: [
-          Image.asset("assets/logo.png", height: 36),
+          Image.asset("assets/logo.png", height: 56), // bigger logo
           const Spacer(),
-          _TopMenuButtonAdmin(
-  onSignOut: onSignOut,
-),
-
+          _TopMenuButtonAdmin(onSignOut: onSignOut),
         ],
       ),
     );
@@ -72,11 +69,11 @@ class HomePageAdmin extends StatelessWidget {
 
     // ----- PROFILE SECTION CARD -----
     final profileCard = Padding(
-    padding: const EdgeInsets.fromLTRB(16, 14, 16, 0),
-    child: Card(
-    color: const Color(0xFFE3F2FD), // light blue surface ✅
-    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-    child: Padding(
+      padding: const EdgeInsets.fromLTRB(16, 14, 16, 0),
+      child: Card(
+        color: const Color(0xFFFFF8E1), // warm pale yellow
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        child: Padding(
           padding: const EdgeInsets.all(12),
           child: Row(
             children: [
@@ -85,9 +82,10 @@ class HomePageAdmin extends StatelessWidget {
                 backgroundImage: (avatarUrl != null && avatarUrl!.isNotEmpty)
                     ? NetworkImage(avatarUrl!)
                     : null,
-                backgroundColor: const Color(0xFF1565C0).withOpacity(0.08),
+                backgroundColor: const Color(0xFFFFD54F).withOpacity(0.20), // amber tint
                 child: (avatarUrl == null || avatarUrl!.isEmpty)
-                    ? const Icon(Icons.admin_panel_settings, color: Color(0xFF1565C0), size: 28)
+                    ? const Icon(Icons.admin_panel_settings,
+                        color: Color(0xFFFFA000), size: 28) // amber 700
                     : null,
               ),
               const SizedBox(width: 12),
@@ -95,11 +93,15 @@ class HomePageAdmin extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(adminName?.isNotEmpty == true ? adminName! : "Administrator",
-                        style: const TextStyle(fontWeight: FontWeight.w800)),
+                    Text(
+                      adminName?.isNotEmpty == true ? adminName! : "Administrator",
+                      style: const TextStyle(fontWeight: FontWeight.w800),
+                    ),
                     const SizedBox(height: 2),
-                    Text(adminEmail?.isNotEmpty == true ? adminEmail! : "admin@pawpal.app",
-                        style: t.bodyMedium),
+                    Text(
+                      adminEmail?.isNotEmpty == true ? adminEmail! : "admin@pawpal.app",
+                      style: t.bodyMedium,
+                    ),
                   ],
                 ),
               ),
@@ -114,7 +116,7 @@ class HomePageAdmin extends StatelessWidget {
       ),
     );
 
-    // ----- QUICK STATS (like your MetricCards) -----
+    // ----- QUICK STATS -----
     final statsRow = Padding(
       padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
       child: Row(
@@ -141,7 +143,7 @@ class HomePageAdmin extends StatelessWidget {
       ),
     );
 
-    // ----- ACTIONS (User list / history / status) -----
+    // ----- ACTIONS -----
     final actionRow = Padding(
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 80),
       child: Row(
@@ -152,7 +154,7 @@ class HomePageAdmin extends StatelessWidget {
             subtitle: "List",
             icon: Icons.people,
             onTap: onOpenUserList,
-            active: true,
+            active: true, // amber highlight
           ),
           _ActionCardAdmin(
             title: "User",
@@ -170,41 +172,51 @@ class HomePageAdmin extends StatelessWidget {
       ),
     );
 
-    // (optional) FAB – you can rewire this to “Add User” if you want
+    // ----- FAB -----
     final fab = FloatingActionButton.extended(
       onPressed: onOpenUserList,
       icon: const Icon(Icons.people),
       label: const Text('User List', style: TextStyle(fontWeight: FontWeight.w700)),
-      backgroundColor: const Color(0xFF1565C0),
+      backgroundColor: const Color(0xFFFFB300), // amber 600
       foregroundColor: Colors.white,
-
-
     );
 
-    return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            topBar,
-            welcome,
-            profileCard,
-            statsRow,
-            actionRow,
+    // ----- GRADIENT WRAPPER (yellow -> white) -----
+    return Container(
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            Color(0xFFFFF3C4), // pale warm yellow top
+            Color(0xFFFFFFFF), // white bottom
           ],
         ),
       ),
-      floatingActionButton: fab,
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        body: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              topBar,
+              welcome,
+              profileCard,
+              statsRow,
+              actionRow,
+            ],
+          ),
+        ),
+        floatingActionButton: fab,
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      ),
     );
   }
 }
 
-// ===== Top menu (Profile / Sign out) =====
+// ===== Top menu (Sign out only) =====
 class _TopMenuButtonAdmin extends StatelessWidget {
   const _TopMenuButtonAdmin({this.onSignOut});
-
   final VoidCallback? onSignOut;
 
   @override
@@ -229,8 +241,7 @@ class _TopMenuButtonAdmin extends StatelessWidget {
 
 enum _AdminMenuAction { signOut }
 
-
-// ===== Reusable cards (same look as Home) =====
+// ===== Reusable cards =====
 class _MetricCardAdmin extends StatelessWidget {
   const _MetricCardAdmin({
     required this.icon,
@@ -248,11 +259,10 @@ class _MetricCardAdmin extends StatelessWidget {
   Widget build(BuildContext context) {
     final text = Theme.of(context).textTheme;
     return Expanded(
-    child: Card(
-    color: const Color(0xFFE3F2FD), // light blue surface
-    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-    child: Padding(
-
+      child: Card(
+        color: const Color(0xFFFFF8E1), // warm pale yellow
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        child: Padding(
           padding: const EdgeInsets.all(12),
           child: Row(
             children: [
@@ -299,7 +309,7 @@ class _ActionCardAdmin extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Card(
-        color: active ? const Color(0xFF90CAF9) : Colors.white, 
+        color: active ? const Color(0xFFFFC107) : const Color(0xFFFFF8E1), // amber vs pale yellow
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         child: SizedBox(
           width: 100,
@@ -331,7 +341,6 @@ class _ActionCardAdmin extends StatelessWidget {
 }
 
 // ===== Optional placeholder pages (UI-only) =====
-// You can delete these and use your own pages if you prefer.
 class AdminUserListPage extends StatelessWidget {
   const AdminUserListPage({super.key});
 
