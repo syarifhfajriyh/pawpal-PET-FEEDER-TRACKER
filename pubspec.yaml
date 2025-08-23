@@ -5,7 +5,7 @@ publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-  sdk: ">=3.0.0 <4.0.0"   # Dart SDK range (string)
+  sdk: ">=3.0.0 <4.0.0"   # Dart SDK range
 
 dependencies:
   flutter:
@@ -14,6 +14,10 @@ dependencies:
   cupertino_icons: ^1.0.8
   image_picker: ^1.1.2
   intl: ^0.19.0
+
+  firebase_core: ^3.6.0
+
+  firebase_auth: ^5.3.0
 
 dev_dependencies:
   flutter_test:
@@ -24,7 +28,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/logo.png
-    - assets/petfeed.png
+    - assets/petfeed.jpg
     - assets/conn.png
     - assets/mic.png
     - assets/setup.png
