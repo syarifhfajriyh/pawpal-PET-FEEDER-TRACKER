@@ -1,13 +1,21 @@
 import 'package:flutter/material.dart';
+
 import 'screens/HomePage.dart';
 import 'widgets/Login.dart';
 import 'widgets/Scheduler.dart';
 import 'screens/ProfilePage.dart';
 import 'screens/HistoryPage.dart';
-import 'package:paw_ui/screens/HomePageAdmin.dart';
+import 'screens/VerifyEmail.dart';
+import 'screens/HomePageAdmin.dart';
 
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const PawFeederApp());
 }
 
@@ -44,6 +52,13 @@ class PawFeederApp extends StatelessWidget {
           ),
         ),
       ),
+
+      // 🔗 Routes
+      routes: {
+        '/verify': (context) => const VerifyEmail(),
+        '/home':   (context) => const _Root(),
+      },
+
       home: const _Root(),
     );
   }
@@ -81,16 +96,7 @@ class _RootState extends State<_Root> {
               child: Center(
                 child: SingleChildScrollView(
                   padding: const EdgeInsets.all(16),
-                  child: Login(
-                    connecting: false,
-                    errorMessage: "",
-                    onSubmit: (u, p) {
-                      Navigator.of(ctx).pop(true); // success (UI-only)
-                    },
-                    onRouteDecision: (isAdmin) => _isAdmin = isAdmin,
-                    onSignUp: () {},
-                    onForgotPassword: (_) {},
-                  ),
+                  child: Login(),
                 ),
               ),
             ),
@@ -151,91 +157,76 @@ class _RootState extends State<_Root> {
 
   @override
   Widget build(BuildContext context) {
-   // === ADMIN LANDING ===
-if (_loggedIn && _isAdmin) {
-  return HomePageAdmin(
-    adminName: 'Admin',
-    adminEmail: 'admin@pawpal.app',
-    totalUsers: 12,
-    devicesOnline: 8,
-    errors24h: 1,
-
-    // open profile editor (your existing ProfilePage)
-    onOpenProfile: () {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (_) => const ProfilePage()),
+    // === ADMIN LANDING ===
+    if (_loggedIn && _isAdmin) {
+      return HomePageAdmin(
+        adminName: 'Admin',
+        adminEmail: 'admin@pawpal.app',
+        totalUsers: 12,
+        devicesOnline: 8,
+        errors24h: 1,
+        onOpenProfile: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => const ProfilePage()),
+          );
+        },
+        onOpenUserList: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => const AdminUserListPage()),
+          );
+        },
+        onOpenUserHistory: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => const AdminUserHistoryPage()),
+          );
+        },
+        onOpenUserStatus: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => const AdminUserStatusPage()),
+          );
+        },
+        onSignOut: () => setState(() {
+          _loggedIn = false;
+          _isAdmin = false;
+        }),
       );
-    },
-
-    // admin actions (UI-only pages are defined inside HomePageAdmin.dart)
-    onOpenUserList: () {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (_) => const AdminUserListPage()),
-      );
-    },
-    onOpenUserHistory: () {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (_) => const AdminUserHistoryPage()),
-      );
-    },
-    onOpenUserStatus: () {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (_) => const AdminUserStatusPage()),
-      );
-    },
-
-    onSignOut: () => setState(() {
-      _loggedIn = false;
-      _isAdmin = false;
-    }),
-  );
-}
-
+    }
 
     return HomePageView(
-      // Empty state until “connected” (logged in)
       showEmptyState: !_loggedIn,
       emptyImageAsset: 'assets/petfeed.jpg',
       emptyText: "Voops! Couldn't find any PawFeeder.",
-
-      // not using authorizing/error for this look
       isAuthorizing: false,
       errorMessage: null,
       onRetryAuthorize: null,
-
-      // menu
       onOpenProfile: () {
-      Navigator.push(
-      context,
-      MaterialPageRoute(builder: (_) => const ProfilePage()),
-      );
-    },
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const ProfilePage()),
+        );
+      },
       onOpenHistory: () {
-      Navigator.push(
-      context,
-      MaterialPageRoute(builder: (_) => const HistoryPage()),
-    );
-  },
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const HistoryPage()),
+        );
+      },
       onSignOut: () => setState(() => _loggedIn = false),
-
-      // status (NO username -> removes greeting)
       username: null,
       avatarUrl: null,
       foodWeightGrams: _loggedIn ? 420 : null,
       catDetected: _loggedIn,
-
-      // actions
       onDispense: () {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Dispensing food… (UI-only)')),
         );
       },
-      onSchedule: () => _openSchedulerSheet(), // <-- Schedule opens Scheduler sheet
-      onConnectDevice: _openLoginSheet,        // navy “+ PawFeeder” opens Login sheet
+      onSchedule: () => _openSchedulerSheet(),
+      onConnectDevice: _openLoginSheet,
     );
   }
 }
