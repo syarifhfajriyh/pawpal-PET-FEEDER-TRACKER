@@ -158,36 +158,74 @@ class HomePageView extends StatelessWidget {
     );
 
     // ---------- HISTORY SHORTCUTS (optional) ----------
-    final historyShortcuts = (onOpenFeedingHistory == null && onOpenWeightHistory == null && onOpenCatHistory == null)
+    final historyShortcuts = (onOpenFeedingHistory == null &&
+            onOpenWeightHistory == null &&
+            onOpenCatHistory == null)
         ? const SizedBox.shrink()
         : Padding(
             padding: const EdgeInsets.only(top: 16.0),
-            child: Center(
-              child: Wrap(
-                spacing: 12,
-                runSpacing: 10,
-                alignment: WrapAlignment.center,
-                children: [
-                  if (onOpenFeedingHistory != null)
-                    _BigHistoryButton(
-                      icon: Icons.history,
-                      label: 'Feeding History',
-                      onPressed: onOpenFeedingHistory,
-                    ),
-                  if (onOpenWeightHistory != null)
-                    _BigHistoryButton(
-                      icon: Icons.scale,
-                      label: 'Food Weight History',
-                      onPressed: onOpenWeightHistory,
-                    ),
-                  if (onOpenCatHistory != null)
-                    _BigHistoryButton(
-                      icon: Icons.pets,
-                      label: 'Cat Detection History',
-                      onPressed: onOpenCatHistory,
-                    ),
-                ],
-              ),
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final hasAllThree = onOpenFeedingHistory != null &&
+                    onOpenWeightHistory != null &&
+                    onOpenCatHistory != null;
+
+                // If we have all 3, render a single row aligned with action cards
+                if (hasAllThree) {
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      _BigHistoryButton(
+                        icon: Icons.history,
+                        label: 'Feeding History',
+                        onPressed: onOpenFeedingHistory,
+                        square: true, // match 100x100 action cards
+                      ),
+                      _BigHistoryButton(
+                        icon: Icons.scale,
+                        label: 'Food Weight History',
+                        onPressed: onOpenWeightHistory,
+                        square: true,
+                      ),
+                      _BigHistoryButton(
+                        icon: Icons.pets,
+                        label: 'Cat Detection History',
+                        onPressed: onOpenCatHistory,
+                        square: true,
+                      ),
+                    ],
+                  );
+                }
+
+                // Otherwise, fall back to a centered wrap for 1-2 buttons
+                return Center(
+                  child: Wrap(
+                    spacing: 12,
+                    runSpacing: 10,
+                    alignment: WrapAlignment.center,
+                    children: [
+                      if (onOpenFeedingHistory != null)
+                        _BigHistoryButton(
+                          icon: Icons.history,
+                          label: 'Feeding History',
+                          onPressed: onOpenFeedingHistory,
+                        ),
+                      if (onOpenWeightHistory != null)
+                        _BigHistoryButton(
+                          icon: Icons.scale,
+                          label: 'Food Weight History',
+                          onPressed: onOpenWeightHistory,
+                        ),
+                      if (onOpenCatHistory != null)
+                        _BigHistoryButton(
+                          icon: Icons.pets,
+                          label: 'Cat Detection History',
+                          onPressed: onOpenCatHistory,
+                        ),
+                    ],
+                  ),
+                );
+              },
             ),
           );
 
@@ -419,9 +457,10 @@ class _ActionCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Card(
-        // Soft yellow for normal buttons, blue for the active one
+        // Soft yellow for normal buttons, light blue for the active one
         color: active
-            ? const Color(0xFF0e2a47) // dark blue palette
+            // Give Schedule Feed a distinct light blue color
+            ? const Color(0xFF64B5F6) // light blue 300
             : const Color(0xFFFFF8E1),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         child: SizedBox(
@@ -481,36 +520,66 @@ class _BigHistoryButton extends StatelessWidget {
     required this.icon,
     required this.label,
     this.onPressed,
+    this.fullWidth = false,
+    this.square = false,
   });
 
   final IconData icon;
   final String label;
   final VoidCallback? onPressed;
+  final bool fullWidth;
+  final bool square;
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: 120,
-      height: 44,
-      child: ElevatedButton.icon(
-        style: ElevatedButton.styleFrom(
-          elevation: 2,
-          backgroundColor: const Color(0xFF0e2a47), // dark blue palette
-          foregroundColor: const Color(0xFFFFC34D), // brand yellow for text/icons
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-          padding: const EdgeInsets.symmetric(horizontal: 8),
-        ),
-        onPressed: onPressed,
-        icon: Icon(icon, size: 18),
-        label: Text(
-          label,
-          overflow: TextOverflow.ellipsis,
-          maxLines: 1,
-          style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 12),
-        ),
+    final width = square ? 100.0 : (fullWidth ? double.infinity : 160.0);
+    final height = square ? 100.0 : 48.0;
+
+    final style = ElevatedButton.styleFrom(
+      elevation: 2,
+      backgroundColor: const Color(0xFF0e2a47), // dark blue palette
+      foregroundColor: const Color(0xFFFFC34D), // brand yellow for text/icons
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
       ),
+      side: BorderSide(color: const Color(0xFFFFC34D).withOpacity(0.25), width: 1),
+      padding: const EdgeInsets.symmetric(horizontal: 12),
+    );
+
+    return SizedBox(
+      width: width,
+      height: height,
+      child: square
+          ? ElevatedButton(
+              style: style,
+              onPressed: onPressed,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(icon, size: 22),
+                  const SizedBox(height: 8),
+                  Text(
+                    label,
+                    maxLines: 2,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 12),
+                  ),
+                ],
+              ),
+            )
+          : ElevatedButton.icon(
+              style: style,
+              onPressed: onPressed,
+              icon: Icon(icon, size: 18),
+              label: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  label,
+                  maxLines: 1,
+                  style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 13),
+                ),
+              ),
+            ),
     );
   }
 }
