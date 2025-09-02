@@ -171,8 +171,9 @@ class _LoginState extends State<Login> {
                 MaterialPageRoute(builder: (_) => const VerifyEmail()),
               );
             } on FirebaseAuthException catch (e) {
-              if (mounted)
+              if (mounted) {
                 setState(() => _error = e.message ?? "Sign up failed");
+              }
             } catch (e) {
               if (mounted) setState(() => _error = "Sign up failed: $e");
             }

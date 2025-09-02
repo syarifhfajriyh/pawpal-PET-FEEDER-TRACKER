@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../services/AuthService.dart';
 import '../services/databaseUser.dart';
+import '../services/FeederService.dart';
 
 class HistoryPage extends StatelessWidget {
   const HistoryPage({super.key});
@@ -12,47 +13,90 @@ class HistoryPage extends StatelessWidget {
     final auth = AuthService();
     final db = DatabaseUser();
     final uid = auth.currentUser?.uid;
+    final feeder = FeederService();
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Feeding History'),
+        actions: [
+          IconButton(
+            tooltip: 'Food Weight History',
+            icon: const Icon(Icons.scale),
+            onPressed: () {
+              Navigator.of(context).pushNamed('/history-weight');
+            },
+          ),
+          IconButton(
+            tooltip: 'Cat Detection History',
+            icon: const Icon(Icons.pets),
+            onPressed: () {
+              Navigator.of(context).pushNamed('/history-cat');
+            },
+          ),
+        ],
       ),
       body: (uid == null)
           ? const Center(child: Text('No user logged in'))
-          : FutureBuilder<QuerySnapshot>(
-              future: db.getUserHistory(uid),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
+          : StreamBuilder<List<FeedEvent>>( // device feeds preferred
+              stream: feeder.streamFeeds(feeder.defaultDeviceId),
+              builder: (context, devSnap) {
+                if (devSnap.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());
                 }
-                if (snapshot.hasError) {
-                  return Center(child: Text('Error: ${snapshot.error}'));
+                if (devSnap.hasError) {
+                  return Center(child: Text('Error: ${devSnap.error}'));
                 }
-                final docs = snapshot.data?.docs ?? [];
-                if (docs.isEmpty) {
-                  return const Center(child: Text('No history found.'));
+                final feedEvents = devSnap.data ?? const <FeedEvent>[];
+                if (feedEvents.isEmpty) {
+                  // Fallback to legacy user_history if device has no feeds
+                  return FutureBuilder<QuerySnapshot>(
+                    future: db.getUserHistory(uid),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(child: CircularProgressIndicator());
+                      }
+                      if (snapshot.hasError) {
+                        return Center(child: Text('Error: ${snapshot.error}'));
+                      }
+                      final docs = snapshot.data?.docs ?? [];
+                      if (docs.isEmpty) {
+                        return const Center(child: Text('No history found.'));
+                      }
+                      return ListView.separated(
+                        padding: const EdgeInsets.fromLTRB(12, 8, 12, 12),
+                        itemCount: docs.length,
+                        separatorBuilder: (_, __) => const Divider(height: 1),
+                        itemBuilder: (_, i) {
+                          final data = docs[i].data() as Map<String, dynamic>;
+                          final ts = data['timestamp'] as Timestamp?;
+                          final time = ts?.toDate() ?? DateTime.now();
+                          final grams = data['portionSize'] ?? data['grams'] ?? '-';
+                          final note = data['note'] ?? data['action'] ?? '';
+                          return ListTile(
+                            leading: const CircleAvatar(child: Icon(Icons.history)),
+                            title: Text('${grams}g • $note'),
+                            subtitle: Text(_formatDateTime(time)),
+                            trailing: const Icon(Icons.chevron_right),
+                          );
+                        },
+                      );
+                    },
+                  );
                 }
+                // Device feeds UI
                 return ListView.separated(
                   padding: const EdgeInsets.fromLTRB(12, 8, 12, 12),
-                  itemCount: docs.length,
+                  itemCount: feedEvents.length,
                   separatorBuilder: (_, __) => const Divider(height: 1),
                   itemBuilder: (_, i) {
-                    final data = docs[i].data() as Map<String, dynamic>;
-                    final ts = data['timestamp'] as Timestamp?;
-                    final time = ts?.toDate() ?? DateTime.now();
-                    final grams = data['portionSize'] ?? data['grams'] ?? '-';
-                    final note = data['note'] ?? data['action'] ?? '';
-
+                    final e = feedEvents[i];
+                    final grams = e.grams ?? '-';
+                    final note = e.note ?? (e.scheduledAt != null ? 'schedule' : 'dispense');
                     return ListTile(
                       leading: const CircleAvatar(child: Icon(Icons.history)),
                       title: Text('${grams}g • $note'),
-                      subtitle: Text(_formatDateTime(time)),
+                      subtitle: Text(_formatDateTime(e.timestamp)),
                       trailing: const Icon(Icons.chevron_right),
-                      onTap: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Fed ${grams}g ($note)')),
-                        );
-                      },
                     );
                   },
                 );

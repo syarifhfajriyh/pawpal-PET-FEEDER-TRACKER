@@ -135,7 +135,7 @@ class _AdminUserEditPageState extends State<AdminUserEditPage> {
       appBar: AppBar(
         title: const Text('Edit User'),
         backgroundColor: const Color(0xFFFFF3C4),
-        foregroundColor: Color(0xFF0E2A47),
+        foregroundColor: const Color(0xFF0E2A47),
         actions: [
           IconButton(
             tooltip: 'Delete user',

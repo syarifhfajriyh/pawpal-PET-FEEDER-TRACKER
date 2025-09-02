@@ -21,9 +21,7 @@ class AdminMyProfileViewPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Admin - Profile'),
-        backgroundColor: const Color(0xFFFFF3C4),
-        foregroundColor: Color(0xFF0E2A47),
+        title: const Text('Admin · Profile'),
         actions: [
           IconButton(
             tooltip: 'Edit profile',
@@ -36,7 +34,6 @@ class AdminMyProfileViewPage extends StatelessWidget {
           ),
         ],
       ),
-      backgroundColor: const Color(0xFFFFFDF3),
       body: StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
         stream: fs.streamUser(uid),
         builder: (context, snapshot) {
@@ -48,22 +45,17 @@ class AdminMyProfileViewPage extends StatelessWidget {
           }
           final data = snapshot.data?.data() ?? <String, dynamic>{};
 
-          final email =
-              (data['email'] as String?) ?? auth.currentUser?.email ?? '-';
-          final name =
-              (data['displayName'] as String?) ?? email.split('@').first;
+          final email = (data['email'] as String?) ?? auth.currentUser?.email ?? '-';
+          final name = (data['displayName'] as String?) ?? email.split('@').first;
           final username = (data['username'] as String?) ?? '';
           final bio = (data['bio'] as String?) ?? '';
           final petName = (data['petName'] as String?) ?? '';
           final petType = (data['petType'] as String?) ?? '';
           final notifEnabled = (data['notifEnabled'] as bool?) ?? false;
           final avatar = (data['avatarUrl'] as String?) ?? '';
-          final emailVerified = (data['emailVerified'] as bool? ?? false)
-              ? 'Verified'
-              : 'Unverified';
-          final staffId = (data['staffId'] as String?) ?? '';
+          final emailVerified = (data['emailVerified'] as bool? ?? false) ? 'Verified' : 'Unverified';
 
-          String _fmtTs(dynamic ts) {
+          String fmtTs(dynamic ts) {
             try {
               if (ts is Timestamp) {
                 final d = ts.toDate().toLocal();
@@ -76,9 +68,8 @@ class AdminMyProfileViewPage extends StatelessWidget {
             } catch (_) {}
             return '-';
           }
-
-          final createdAt = _fmtTs(data['createdAt']);
-          final lastSeen = _fmtTs(data['lastSeen']);
+          final createdAt = fmtTs(data['createdAt']);
+          final lastSeen = fmtTs(data['lastSeen']);
 
           ImageProvider<Object>? avatarProvider() {
             if (avatar.isNotEmpty) return NetworkImage(avatar);
@@ -96,8 +87,7 @@ class AdminMyProfileViewPage extends StatelessWidget {
                   child: avatar.isEmpty
                       ? Text(
                           name.isNotEmpty ? name[0].toUpperCase() : '?',
-                          style: const TextStyle(
-                              fontSize: 28, fontWeight: FontWeight.w700),
+                          style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w700),
                         )
                       : null,
                 ),
@@ -106,18 +96,7 @@ class AdminMyProfileViewPage extends StatelessWidget {
               Center(
                 child: Text(
                   name,
-                  style: const TextStyle(
-                      fontSize: 18, fontWeight: FontWeight.w800),
-                ),
-              ),
-              const SizedBox(height: 8),
-              Center(
-                child: Chip(
-                  label: const Text('ADMIN'),
-                  labelStyle: const TextStyle(
-                      fontWeight: FontWeight.w800, color: Color(0xFF0E2A47)),
-                  backgroundColor: Color(0xFFFFC34D).withOpacity(0.3),
-                  side: BorderSide(color: const Color(0xFFFFC34D)),
+                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
                 ),
               ),
               const SizedBox(height: 16),
@@ -126,9 +105,7 @@ class AdminMyProfileViewPage extends StatelessWidget {
               _tile('Bio', bio, Icons.info_outline),
               _tile('Pet name', petName, Icons.pets),
               _tile('Pet type', petType, Icons.category_outlined),
-              _tile('Staff ID', staffId, Icons.badge_outlined),
-              _tile(
-                  'Verification', emailVerified, Icons.verified_user_outlined),
+              _tile('Verification', emailVerified, Icons.verified_user_outlined),
               SwitchListTile(
                 value: notifEnabled,
                 onChanged: null,
@@ -142,12 +119,11 @@ class AdminMyProfileViewPage extends StatelessWidget {
               FilledButton.icon(
                 onPressed: () {
                   Navigator.of(context).push(
-                    MaterialPageRoute(
-                        builder: (_) => const AdminEditProfilePage()),
+                    MaterialPageRoute(builder: (_) => const AdminEditProfilePage()),
                   );
                 },
                 icon: const Icon(Icons.edit),
-                label: const Text('Profile'),
+                label: const Text('Edit Profile'),
               ),
             ],
           );
@@ -161,10 +137,9 @@ class AdminMyProfileViewPage extends StatelessWidget {
       dense: true,
       contentPadding: EdgeInsets.zero,
       leading: Icon(icon),
-      title: Text(label,
-          style: const TextStyle(fontSize: 12, color: Colors.black54)),
-      subtitle: Text(value.isEmpty ? '-' : value,
-          style: const TextStyle(fontWeight: FontWeight.w600)),
+      title: Text(label, style: const TextStyle(fontSize: 12, color: Colors.black54)),
+      subtitle: Text(value.isEmpty ? '-' : value, style: const TextStyle(fontWeight: FontWeight.w600)),
     );
   }
 }
+

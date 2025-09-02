@@ -19,8 +19,6 @@ class AdminUserProfileViewPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('User Profile'),
-        backgroundColor: const Color(0xFFFFF3C4),
-        foregroundColor: Color(0xFF0E2A47),
         actions: [
           IconButton(
             tooltip: 'Edit user',
@@ -40,7 +38,6 @@ class AdminUserProfileViewPage extends StatelessWidget {
           ),
         ],
       ),
-      backgroundColor: const Color(0xFFFFFDF3),
       body: StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
         stream: fs.streamUser(userId),
         builder: (context, snapshot) {
@@ -53,8 +50,7 @@ class AdminUserProfileViewPage extends StatelessWidget {
           final data = snapshot.data?.data() ?? <String, dynamic>{};
 
           final email = (data['email'] as String?) ?? '-';
-          final name =
-              (data['displayName'] as String?) ?? email.split('@').first;
+          final name = (data['displayName'] as String?) ?? email.split('@').first;
           final username = (data['username'] as String?) ?? '';
           final bio = (data['bio'] as String?) ?? '';
           final petName = (data['petName'] as String?) ?? '';
@@ -65,13 +61,14 @@ class AdminUserProfileViewPage extends StatelessWidget {
           final role = (rawRole is int)
               ? (rawRole == 1 ? 'admin' : 'user')
               : ((rawRole?.toString() ?? 'user'));
-          final emailVerified =
-              (data['emailVerified'] as bool?)?.toString().toLowerCase() ==
-                      'true'
-                  ? 'Verified'
-                  : 'Unverified';
+          final emailVerified = (data['emailVerified'] as bool?)
+                  ?.toString()
+                  .toLowerCase() ==
+              'true'
+              ? 'Verified'
+              : 'Unverified';
 
-          String _fmtTs(dynamic ts) {
+          String fmtTs(dynamic ts) {
             try {
               if (ts is Timestamp) {
                 final d = ts.toDate().toLocal();
@@ -84,9 +81,8 @@ class AdminUserProfileViewPage extends StatelessWidget {
             } catch (_) {}
             return '-';
           }
-
-          final createdAt = _fmtTs(data['createdAt']);
-          final lastSeen = _fmtTs(data['lastSeen']);
+          final createdAt = fmtTs(data['createdAt']);
+          final lastSeen = fmtTs(data['lastSeen']);
 
           ImageProvider<Object>? avatarProvider() {
             if (avatar.isNotEmpty) return NetworkImage(avatar);
@@ -104,8 +100,7 @@ class AdminUserProfileViewPage extends StatelessWidget {
                   child: avatar.isEmpty
                       ? Text(
                           name.isNotEmpty ? name[0].toUpperCase() : '?',
-                          style: const TextStyle(
-                              fontSize: 28, fontWeight: FontWeight.w700),
+                          style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w700),
                         )
                       : null,
                 ),
@@ -114,16 +109,15 @@ class AdminUserProfileViewPage extends StatelessWidget {
               Center(
                 child: Text(
                   name,
-                  style: const TextStyle(
-                      fontSize: 18, fontWeight: FontWeight.w800),
+                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
                 ),
               ),
               const SizedBox(height: 4),
               Center(
-                child:
-                    Text(role, style: const TextStyle(color: Colors.black54)),
+                child: Text(role, style: const TextStyle(color: Colors.black54)),
               ),
               const SizedBox(height: 16),
+
               _ReadOnlyTile(
                 label: 'Email',
                 value: email,
@@ -138,35 +132,22 @@ class AdminUserProfileViewPage extends StatelessWidget {
                 copyable: true,
                 copyText: userId,
               ),
-              _ReadOnlyTile(
-                  label: 'Username',
-                  value: username,
-                  leading: Icons.alternate_email),
-              _ReadOnlyTile(
-                  label: 'Bio', value: bio, leading: Icons.info_outline),
-              _ReadOnlyTile(
-                  label: 'Pet name', value: petName, leading: Icons.pets),
-              _ReadOnlyTile(
-                  label: 'Pet type',
-                  value: petType,
-                  leading: Icons.category_outlined),
-              _ReadOnlyTile(
-                  label: 'Verification',
-                  value: emailVerified,
-                  leading: Icons.verified_user_outlined),
+              _ReadOnlyTile(label: 'Username', value: username, leading: Icons.alternate_email),
+              _ReadOnlyTile(label: 'Bio', value: bio, leading: Icons.info_outline),
+              _ReadOnlyTile(label: 'Pet name', value: petName, leading: Icons.pets),
+              _ReadOnlyTile(label: 'Pet type', value: petType, leading: Icons.category_outlined),
+              _ReadOnlyTile(label: 'Verification', value: emailVerified, leading: Icons.verified_user_outlined),
               SwitchListTile(
                 value: notifEnabled,
                 onChanged: null,
                 title: const Text('Notifications'),
                 subtitle: const Text('Feeding reminders & device alerts'),
               ),
+
               const Divider(height: 24),
-              _ReadOnlyTile(
-                  label: 'Created',
-                  value: createdAt,
-                  leading: Icons.event_available_outlined),
-              _ReadOnlyTile(
-                  label: 'Last seen', value: lastSeen, leading: Icons.schedule),
+              _ReadOnlyTile(label: 'Created', value: createdAt, leading: Icons.event_available_outlined),
+              _ReadOnlyTile(label: 'Last seen', value: lastSeen, leading: Icons.schedule),
+
               const SizedBox(height: 12),
               FilledButton.icon(
                 onPressed: () async {
@@ -220,8 +201,7 @@ class _ReadOnlyTile extends StatelessWidget {
               tooltip: 'Copy',
               icon: const Icon(Icons.copy, size: 18),
               onPressed: () async {
-                final text =
-                    (copyText == null || copyText!.isEmpty) ? value : copyText!;
+                final text = (copyText == null || copyText!.isEmpty) ? value : copyText!;
                 await Clipboard.setData(ClipboardData(text: text));
                 if (context.mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(

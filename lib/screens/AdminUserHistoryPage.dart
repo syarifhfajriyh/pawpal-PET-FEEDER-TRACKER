@@ -16,7 +16,7 @@ class AdminUserHistoryPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('User History'),
         backgroundColor: const Color(0xFFFFF3C4),
-        foregroundColor: Color(0xFF0E2A47),
+        foregroundColor: const Color(0xFF0E2A47),
       ),
       backgroundColor: const Color(0xFFFFFDF3),
       body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(

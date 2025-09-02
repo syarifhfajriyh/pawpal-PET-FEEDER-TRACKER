@@ -260,9 +260,9 @@ class _AdminEditProfilePageState extends State<AdminEditProfilePage> {
       appBar: AppBar(
         title: const Text('Admin - Profile'),
         backgroundColor: const Color(0xFFFFF3C4),
-        foregroundColor: Color(0xFF0E2A47),
+        foregroundColor: const Color(0xFF0E2A47),
       ),
-      backgroundColor: Color(0xFFFFFDF3),
+      backgroundColor: const Color(0xFFFFFDF3),
       body: SafeArea(
         child: Form(
           key: _formKey,

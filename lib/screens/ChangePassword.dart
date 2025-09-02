@@ -137,8 +137,9 @@ class _ChangePasswordState extends State<ChangePassword> {
                     labelText: 'Confirm new password',
                   ),
                   validator: (v) {
-                    if (v == null || v.isEmpty)
+                    if (v == null || v.isEmpty) {
                       return 'Confirm your new password';
+                    }
                     if (v.trim() != _newCtrl.text.trim()) {
                       return 'Passwords do not match';
                     }

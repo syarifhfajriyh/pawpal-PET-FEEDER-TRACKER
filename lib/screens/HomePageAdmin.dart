@@ -9,6 +9,7 @@ import 'AdminChangePassword.dart';
 import 'AdminUserListPage.dart';
 import 'AdminUserHistoryPage.dart';
 import 'AdminUserStatusPage.dart';
+import 'AdminFeederStatusPage.dart';
 
 /// Optional: If you have user profile/change pages too, you can import them as fallbacks
 /// import 'ProfilePage.dart';
@@ -92,10 +93,10 @@ class HomePageAdmin extends StatelessWidget {
         };
 
     final openUserList = onOpenUserList ?? () => go(const AdminUserListPage());
-    final openDevices = onOpenDevices ??
-        () => ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Devices page not wired yet')),
-            );
+    final openDevices = onOpenDevices ?? () =>
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (_) => const AdminFeederStatusPage()),
+        );
     final openUserHistory =
         onOpenUserHistory ?? () => go(const AdminUserHistoryPage());
     final openUserStatus =

@@ -10,6 +10,9 @@ class HomePageView extends StatelessWidget {
     // profile & history navigation
     this.onOpenProfile,
     this.onOpenHistory,
+    this.onOpenFeedingHistory, // prominent button
+    this.onOpenWeightHistory,
+    this.onOpenCatHistory,
     this.onSignOut,
 
     // status data
@@ -17,6 +20,7 @@ class HomePageView extends StatelessWidget {
     this.avatarUrl,
     this.foodWeightGrams,
     this.catDetected = false,
+    this.statusUpdatedAt,
 
     // quick actions
     this.onDispense,
@@ -38,12 +42,16 @@ class HomePageView extends StatelessWidget {
 
   final VoidCallback? onOpenProfile;
   final VoidCallback? onOpenHistory;
+  final VoidCallback? onOpenFeedingHistory;
+  final VoidCallback? onOpenWeightHistory;
+  final VoidCallback? onOpenCatHistory;
   final VoidCallback? onSignOut;
 
   final String? username;
   final String? avatarUrl;
   final int? foodWeightGrams;
   final bool catDetected;
+  final DateTime? statusUpdatedAt;
 
   final VoidCallback? onDispense;
   final VoidCallback? onSchedule;
@@ -110,6 +118,13 @@ class HomePageView extends StatelessWidget {
             ),
           ],
         ),
+        if (statusUpdatedAt != null) ...[
+          const SizedBox(height: 6),
+          Text(
+            _fmtUpdatedAt(statusUpdatedAt!),
+            style: text.bodySmall?.copyWith(color: Colors.grey[600]),
+          ),
+        ],
       ],
     );
 
@@ -141,6 +156,40 @@ class HomePageView extends StatelessWidget {
         ],
       ),
     );
+
+    // ---------- HISTORY SHORTCUTS (optional) ----------
+    final historyShortcuts = (onOpenFeedingHistory == null && onOpenWeightHistory == null && onOpenCatHistory == null)
+        ? const SizedBox.shrink()
+        : Padding(
+            padding: const EdgeInsets.only(top: 16.0),
+            child: Center(
+              child: Wrap(
+                spacing: 12,
+                runSpacing: 10,
+                alignment: WrapAlignment.center,
+                children: [
+                  if (onOpenFeedingHistory != null)
+                    _BigHistoryButton(
+                      icon: Icons.history,
+                      label: 'Feeding History',
+                      onPressed: onOpenFeedingHistory,
+                    ),
+                  if (onOpenWeightHistory != null)
+                    _BigHistoryButton(
+                      icon: Icons.scale,
+                      label: 'Food Weight History',
+                      onPressed: onOpenWeightHistory,
+                    ),
+                  if (onOpenCatHistory != null)
+                    _BigHistoryButton(
+                      icon: Icons.pets,
+                      label: 'Cat Detection History',
+                      onPressed: onOpenCatHistory,
+                    ),
+                ],
+              ),
+            ),
+          );
 
     // ---------- BODY ----------
     Widget body;
@@ -202,6 +251,7 @@ class HomePageView extends StatelessWidget {
             topBar,
             statusStrip,
             quickActions,
+            historyShortcuts,
           ],
         ),
       );
@@ -371,8 +421,8 @@ class _ActionCard extends StatelessWidget {
       child: Card(
         // Soft yellow for normal buttons, blue for the active one
         color: active
-            ? const Color(0xFF1E88E5)
-            : const Color(0xFFFFF8E1), // <- changed
+            ? const Color(0xFF0e2a47) // dark blue palette
+            : const Color(0xFFFFF8E1),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         child: SizedBox(
           width: 100,
@@ -402,3 +452,66 @@ class _ActionCard extends StatelessWidget {
     );
   }
 }
+
+String _fmtUpdatedAt(DateTime dt) {
+  final now = DateTime.now();
+  String two(int v) => v.toString().padLeft(2, '0');
+  final time = "${two(dt.hour)}:${two(dt.minute)}";
+  final sameDay = dt.year == now.year && dt.month == now.month && dt.day == now.day;
+  if (sameDay) return "Updated $time";
+  const months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec"
+  ];
+  return "Updated ${months[dt.month - 1]} ${dt.day}, $time";
+}
+
+class _BigHistoryButton extends StatelessWidget {
+  const _BigHistoryButton({
+    required this.icon,
+    required this.label,
+    this.onPressed,
+  });
+
+  final IconData icon;
+  final String label;
+  final VoidCallback? onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 120,
+      height: 44,
+      child: ElevatedButton.icon(
+        style: ElevatedButton.styleFrom(
+          elevation: 2,
+          backgroundColor: const Color(0xFF0e2a47), // dark blue palette
+          foregroundColor: const Color(0xFFFFC34D), // brand yellow for text/icons
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+        ),
+        onPressed: onPressed,
+        icon: Icon(icon, size: 18),
+        label: Text(
+          label,
+          overflow: TextOverflow.ellipsis,
+          maxLines: 1,
+          style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 12),
+        ),
+      ),
+    );
+  }
+}
+
