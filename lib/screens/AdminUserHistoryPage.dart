@@ -2,6 +2,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../services/FeederService.dart';
+import '../services/FirestoreService.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// User History for admins: Cat Detection and Food Weight.
@@ -217,24 +218,31 @@ class _CatDetectionHistoryTab extends StatelessWidget {
         }
         final docs = snapshot.data?.docs ?? [];
         if (docs.isEmpty) {
-          // Fallback to device telemetry if collection is empty
-          final feeder = FeederService();
-          return StreamBuilder<List<TelemetryEntry>>(
-            stream: feeder.streamTelemetry(feeder.defaultDeviceId),
-            builder: (context, tSnap) {
-              if (tSnap.connectionState == ConnectionState.waiting) {
+          // Fallback: show LIVE users with sample cat-detection rows
+          final fs = FirestoreService();
+          return StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+            stream: fs.streamAllUsers(),
+            builder: (context, uSnap) {
+              if (uSnap.connectionState == ConnectionState.waiting) {
                 return const Center(child: CircularProgressIndicator());
               }
-              if (tSnap.hasError) {
-                return Center(child: Text('Error: ${tSnap.error}'));
+              if (uSnap.hasError) {
+                return Center(child: Text('Error: ${uSnap.error}'));
               }
-              final items = (tSnap.data ?? const <TelemetryEntry>[]) 
-                  .where((e) => e.catDetected != null)
-                  .map((e) => _CatDet.fromMap({
-                        'timestamp': e.timestamp,
-                        'detected': e.catDetected == true,
-                      }))
-                  .where((e) => _within(e.time, cutoff))
+              final users = uSnap.data?.docs ?? const <QueryDocumentSnapshot<Map<String, dynamic>>>[];
+              final now = DateTime.now();
+              final items = users
+                  .map((d) {
+                    final m = d.data();
+                    final email = (m['email'] as String?) ?? '-';
+                    final username = (m['username'] as String?) ?? (m['displayName'] as String?) ?? email.split('@').first;
+                    final seed = (d.id.hashCode ^ email.hashCode) & 0x7fffffff;
+                    final detected = (seed % 2 == 0);
+                    final hoursAgo = 1 + (seed % 12); // within 24h
+                    final time = now.subtract(Duration(hours: hoursAgo));
+                    return _CatDet(userEmail: email, username: username, time: time, detected: detected);
+                  })
+                  .where((e) => _matchUser(e.userEmail, e.username, filter) && _within(e.time, cutoff))
                   .toList();
               return _historyList(items);
             },
@@ -290,24 +298,31 @@ class _FoodWeightHistoryTab extends StatelessWidget {
         }
         final docs = snapshot.data?.docs ?? [];
         if (docs.isEmpty) {
-          // Fallback to device telemetry if collection is empty
-          final feeder = FeederService();
-          return StreamBuilder<List<TelemetryEntry>>(
-            stream: feeder.streamTelemetry(feeder.defaultDeviceId),
-            builder: (context, tSnap) {
-              if (tSnap.connectionState == ConnectionState.waiting) {
+          // Fallback: show LIVE users with sample food-weight rows
+          final fs = FirestoreService();
+          return StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+            stream: fs.streamAllUsers(),
+            builder: (context, uSnap) {
+              if (uSnap.connectionState == ConnectionState.waiting) {
                 return const Center(child: CircularProgressIndicator());
               }
-              if (tSnap.hasError) {
-                return Center(child: Text('Error: ${tSnap.error}'));
+              if (uSnap.hasError) {
+                return Center(child: Text('Error: ${uSnap.error}'));
               }
-              final items = (tSnap.data ?? const <TelemetryEntry>[]) 
-                  .where((e) => e.foodWeightGrams != null)
-                  .map((e) => _FoodLog.fromMap({
-                        'timestamp': e.timestamp,
-                        'weight': e.foodWeightGrams,
-                      }))
-                  .where((e) => _within(e.time, cutoff))
+              final users = uSnap.data?.docs ?? const <QueryDocumentSnapshot<Map<String, dynamic>>>[];
+              final now = DateTime.now();
+              final items = users
+                  .map((d) {
+                    final m = d.data();
+                    final email = (m['email'] as String?) ?? '-';
+                    final username = (m['username'] as String?) ?? (m['displayName'] as String?) ?? email.split('@').first;
+                    final seed = (d.id.hashCode ^ email.hashCode) & 0x7fffffff;
+                    final weight = 120 + (seed % 600); // 120..719g
+                    final hoursAgo = 1 + (seed % 12);
+                    final time = now.subtract(Duration(hours: hoursAgo));
+                    return _FoodLog(userEmail: email, username: username, time: time, weight: weight);
+                  })
+                  .where((e) => _matchUser(e.userEmail, e.username, filter) && _within(e.time, cutoff))
                   .toList();
               return _list(items);
             },

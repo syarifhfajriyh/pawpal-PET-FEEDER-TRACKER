@@ -520,6 +520,7 @@ class _BigHistoryButton extends StatelessWidget {
     required this.icon,
     required this.label,
     this.onPressed,
+    this.fullWidth = false,
     this.square = false,
   });
 
