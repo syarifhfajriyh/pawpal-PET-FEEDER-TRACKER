@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+
 import '../services/FirestoreService.dart';
 import '../services/AuthService.dart';
 import '../services/FunctionsService.dart';
+
 import 'AdminUserEditPage.dart';
 import 'AdminUserProfileViewPage.dart';
 
@@ -35,6 +37,7 @@ class AdminUserListPage extends StatelessWidget {
           if (docs.isEmpty) {
             return const Center(child: Text('No users found.'));
           }
+
           return ListView.separated(
             padding: const EdgeInsets.all(16),
             itemCount: docs.length,
@@ -43,8 +46,7 @@ class AdminUserListPage extends StatelessWidget {
               final d = docs[i];
               final data = d.data();
               final email = data['email'] as String? ?? '-';
-              final name =
-                  data['displayName'] as String? ?? email.split('@').first;
+              final name = data['displayName'] as String? ?? email.split('@').first;
               final rawRole = data['role'];
               final role = (rawRole is int)
                   ? (rawRole == 1 ? 'admin' : 'user')
@@ -56,22 +58,19 @@ class AdminUserListPage extends StatelessWidget {
               return Card(
                 child: ListTile(
                   leading: CircleAvatar(
-                    backgroundImage:
-                        (avatar.isNotEmpty) ? NetworkImage(avatar) : null,
+                    backgroundImage: (avatar.isNotEmpty) ? NetworkImage(avatar) : null,
                     child: (avatar.isEmpty)
                         ? Text(name.isNotEmpty ? name[0].toUpperCase() : '?')
                         : null,
                   ),
-                  title: Text(name,
-                      style: const TextStyle(fontWeight: FontWeight.w700)),
+                  title: Text(name, style: const TextStyle(fontWeight: FontWeight.w700)),
                   subtitle: Text('$email • $role'),
                   trailing: PopupMenuButton<String>(
                     onSelected: (v) async {
                       if (v == 'view') {
                         await Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (_) =>
-                                AdminUserProfileViewPage(userId: d.id),
+                            builder: (_) => AdminUserProfileViewPage(userId: d.id),
                           ),
                         );
                       } else if (v == 'reset') {
@@ -79,8 +78,7 @@ class AdminUserListPage extends StatelessWidget {
                           await auth.sendPasswordResetEmail(email);
                           // ignore: use_build_context_synchronously
                           ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                                content: Text('Reset email sent to $email')),
+                            SnackBar(content: Text('Reset email sent to $email')),
                           );
                         } catch (e) {
                           // ignore: use_build_context_synchronously
@@ -104,9 +102,10 @@ class AdminUserListPage extends StatelessWidget {
                           // ignore: use_build_context_synchronously
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
-                                content: Text(newRole == 1
-                                    ? 'Promoted to admin'
-                                    : 'Demoted to user')),
+                              content: Text(newRole == 1
+                                  ? 'Promoted to admin'
+                                  : 'Demoted to user'),
+                            ),
                           );
                         } catch (e) {
                           // ignore: use_build_context_synchronously
@@ -118,9 +117,7 @@ class AdminUserListPage extends StatelessWidget {
                         if (isMe) {
                           // ignore: use_build_context_synchronously
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                                content: Text(
-                                    'You cannot delete your own account.')),
+                            const SnackBar(content: Text('You cannot delete your own account.')),
                           );
                           return;
                         }
@@ -128,16 +125,15 @@ class AdminUserListPage extends StatelessWidget {
                           context: context,
                           builder: (ctx) => AlertDialog(
                             title: const Text('Delete user?'),
-                            content:
-                                Text('This will permanently delete $email.'),
+                            content: Text('This will permanently delete $email.'),
                             actions: [
                               TextButton(
-                                  onPressed: () => Navigator.pop(ctx, false),
-                                  child: const Text('Cancel')),
+                                onPressed: () => Navigator.pop(ctx, false),
+                                child: const Text('Cancel'),
+                              ),
                               FilledButton(
                                 onPressed: () => Navigator.pop(ctx, true),
-                                style: FilledButton.styleFrom(
-                                    backgroundColor: Colors.red.shade700),
+                                style: FilledButton.styleFrom(backgroundColor: Colors.red.shade700),
                                 child: const Text('Delete'),
                               ),
                             ],
@@ -185,11 +181,10 @@ class AdminUserListPage extends StatelessWidget {
                         enabled: !(isMe && isAdmin),
                         value: isAdmin ? 'make_user' : 'make_admin',
                         child: ListTile(
-                          leading: Icon(isAdmin
-                              ? Icons.person_remove
-                              : Icons.admin_panel_settings),
-                          title:
-                              Text(isAdmin ? 'Demote to user' : 'Make admin'),
+                          leading: Icon(
+                            isAdmin ? Icons.person_remove : Icons.admin_panel_settings,
+                          ),
+                          title: Text(isAdmin ? 'Demote to user' : 'Make admin'),
                         ),
                       ),
                       PopupMenuItem(
@@ -218,3 +213,4 @@ class AdminUserListPage extends StatelessWidget {
     );
   }
 }
+
