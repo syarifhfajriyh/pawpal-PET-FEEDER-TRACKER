@@ -10,6 +10,7 @@ import 'AdminUserListPage.dart';
 import 'AdminUserHistoryPage.dart';
 import 'AdminUserStatusPage.dart';
 import 'AdminFeederStatusPage.dart';
+import 'AdminDispensePage.dart';
 
 /// Optional: If you have user profile/change pages too, you can import them as fallbacks
 /// import 'ProfilePage.dart';
@@ -39,6 +40,7 @@ class HomePageAdmin extends StatelessWidget {
     this.onOpenDevices,
     this.onOpenUserHistory,
     this.onOpenUserStatus,
+    this.onOpenDispense,
   });
 
   final String? adminName;
@@ -57,6 +59,7 @@ class HomePageAdmin extends StatelessWidget {
   final VoidCallback? onOpenDevices;
   final VoidCallback? onOpenUserHistory;
   final VoidCallback? onOpenUserStatus;
+  final VoidCallback? onOpenDispense;
 
   @override
   Widget build(BuildContext context) {
@@ -101,6 +104,8 @@ class HomePageAdmin extends StatelessWidget {
         onOpenUserHistory ?? () => go(const AdminUserHistoryPage());
     final openUserStatus =
         onOpenUserStatus ?? () => go(const AdminUserStatusPage());
+    final openDispense =
+        onOpenDispense ?? () => go(const AdminDispensePage());
 
     // ===== UI ================================================================
     return Container(
@@ -258,6 +263,12 @@ class HomePageAdmin extends StatelessWidget {
                           subtitle: 'Logs',
                           icon: Icons.history,
                           onTap: openUserHistory,
+                        ),
+                        ActionItem(
+                          title: 'Dispense',
+                          subtitle: 'Food',
+                          icon: Icons.restaurant,
+                          onTap: openDispense,
                         ),
                         ActionItem(
                           title: 'Status',

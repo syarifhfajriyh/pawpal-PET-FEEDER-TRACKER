@@ -7,6 +7,7 @@ import '../services/FunctionsService.dart';
 
 import 'AdminUserEditPage.dart';
 import 'AdminUserProfileViewPage.dart';
+import 'AdminDispensePage.dart';
 
 class AdminUserListPage extends StatelessWidget {
   const AdminUserListPage({super.key});
@@ -71,6 +72,14 @@ class AdminUserListPage extends StatelessWidget {
                         await Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (_) => AdminUserProfileViewPage(userId: d.id),
+                          ),
+                        );
+                      } else if (v == 'dispense') {
+                        await Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => AdminDispensePage(
+                              initialUserId: d.id,
+                            ),
                           ),
                         );
                       } else if (v == 'reset') {
@@ -164,6 +173,13 @@ class AdminUserListPage extends StatelessWidget {
                         ),
                       ),
                       const PopupMenuItem(
+                        value: 'dispense',
+                        child: ListTile(
+                          leading: Icon(Icons.restaurant),
+                          title: Text('Dispense food'),
+                        ),
+                      ),
+                      const PopupMenuItem(
                         value: 'reset',
                         child: ListTile(
                           leading: Icon(Icons.mail),
@@ -213,4 +229,3 @@ class AdminUserListPage extends StatelessWidget {
     );
   }
 }
-
