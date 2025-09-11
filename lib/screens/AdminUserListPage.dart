@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import '../services/FirestoreService.dart';
 import '../services/AuthService.dart';
@@ -8,6 +9,7 @@ import '../services/FunctionsService.dart';
 import 'AdminUserEditPage.dart';
 import 'AdminUserProfileViewPage.dart';
 import 'AdminDispensePage.dart';
+import 'VerifyEmail.dart';
 
 class AdminUserListPage extends StatelessWidget {
   const AdminUserListPage({super.key});
@@ -105,6 +107,19 @@ class AdminUserListPage extends StatelessWidget {
                           ),
                         );
                       } else if (v == 'make_admin' || v == 'make_user') {
+                        // Require verified email before calling admin Cloud Functions
+                        final verified = FirebaseAuth.instance.currentUser?.emailVerified ?? false;
+                        if (!verified) {
+                          // ignore: use_build_context_synchronously
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Please verify your email before performing admin actions.')),
+                          );
+                          // ignore: use_build_context_synchronously
+                          await Navigator.of(context).push(
+                            MaterialPageRoute(builder: (_) => const VerifyEmail()),
+                          );
+                          return;
+                        }
                         final newRole = (v == 'make_admin') ? 1 : 0;
                         try {
                           await fx.setUserRole(uid: d.id, role: newRole);
@@ -127,6 +142,19 @@ class AdminUserListPage extends StatelessWidget {
                           // ignore: use_build_context_synchronously
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(content: Text('You cannot delete your own account.')),
+                          );
+                          return;
+                        }
+                        // Require verified email before calling admin Cloud Functions
+                        final verified = FirebaseAuth.instance.currentUser?.emailVerified ?? false;
+                        if (!verified) {
+                          // ignore: use_build_context_synchronously
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Please verify your email before performing admin actions.')),
+                          );
+                          // ignore: use_build_context_synchronously
+                          await Navigator.of(context).push(
+                            MaterialPageRoute(builder: (_) => const VerifyEmail()),
                           );
                           return;
                         }

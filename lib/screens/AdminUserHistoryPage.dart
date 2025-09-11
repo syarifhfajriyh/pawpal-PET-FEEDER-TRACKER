@@ -1,7 +1,5 @@
-import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../services/FeederService.dart';
 import '../services/FirestoreService.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

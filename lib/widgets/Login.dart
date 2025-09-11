@@ -152,33 +152,65 @@ class _LoginState extends State<Login> {
       context: context,
       isScrollControlled: true,
       builder: (ctx) {
-        return SignUp(
-          connecting: false,
-          errorMessage: "",
-          onSubmit: (username, email, password) async {
-            try {
-              final cred = await _auth.createUserWithEmailAndPassword(
-                email: email.trim(),
-                password: password,
-              );
-              await cred.user?.sendEmailVerification();
+        String errorMessage = "";
+        bool connecting = false;
 
-              if (!mounted) return;
-              Navigator.pop(ctx); // close SignUp sheet
-
-              await Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const VerifyEmail()),
-              );
-            } on FirebaseAuthException catch (e) {
-              if (mounted) {
-                setState(() => _error = e.message ?? "Sign up failed");
+        return StatefulBuilder(
+          builder: (context, setSheetState) {
+            Future<void> handleSubmit(String username, String email, String password) async {
+              // Simple client validation for quicker feedback
+              if (email.trim().isEmpty) {
+                setSheetState(() => errorMessage = 'Please enter an email.');
+                return;
               }
-            } catch (e) {
-              if (mounted) setState(() => _error = "Sign up failed: $e");
+              if (password.length < 6) {
+                setSheetState(() => errorMessage = 'Password must be at least 6 characters.');
+                return;
+              }
+              setSheetState(() {
+                errorMessage = "";
+                connecting = true;
+              });
+              try {
+                final cred = await _auth.createUserWithEmailAndPassword(
+                  email: email.trim(),
+                  password: password,
+                );
+                await cred.user?.sendEmailVerification();
+                if (mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Verification email sent to ${email.trim()}')),
+                  );
+                }
+
+                if (!mounted) return;
+                Navigator.pop(ctx); // close SignUp sheet
+                await Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const VerifyEmail()),
+                );
+              } on FirebaseAuthException catch (e) {
+                final msg = e.message ?? 'Sign up failed';
+                setSheetState(() => errorMessage = '${e.code}: $msg');
+              } catch (e) {
+                setSheetState(() => errorMessage = 'Sign up failed: $e');
+              } finally {
+                setSheetState(() => connecting = false);
+              }
             }
+
+            return Padding(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom,
+              ),
+              child: SignUp(
+                connecting: connecting,
+                errorMessage: errorMessage,
+                onSubmit: handleSubmit,
+                onBackToLogin: () => Navigator.pop(ctx),
+              ),
+            );
           },
-          onBackToLogin: () => Navigator.pop(ctx),
         );
       },
     );

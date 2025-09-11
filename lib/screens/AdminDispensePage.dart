@@ -165,8 +165,8 @@ class _AdminDispensePageState extends State<AdminDispensePage> {
                         (m) => m['uid'] == v,
                         orElse: () => {'label': 'user', 'deviceId': null},
                       );
-                      _targetLabel = pick['label'] as String?;
-                      _targetDeviceId = pick['deviceId'] as String?;
+                      _targetLabel = pick['label'];
+                      _targetDeviceId = pick['deviceId'];
                     });
                   },
                 );
