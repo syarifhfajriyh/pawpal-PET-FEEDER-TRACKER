@@ -82,12 +82,6 @@ flutter run
 
 ---
 
-## 📜 License
-
-This project is licensed under the MIT License – see the [LICENSE](LICENSE) file for details.
-
----
-
 ## 💡 Acknowledgements
 
 * IoT integration inspired by community projects.
@@ -95,4 +89,4 @@ This project is licensed under the MIT License – see the [LICENSE](LICENSE) fi
 
 ---
 
-Do you want me to also make this **README include screenshots placeholders** (like `![App Screenshot](assets/images/screenshot1.png)`) so it looks more professional on GitHub?
+
