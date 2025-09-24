@@ -8,7 +8,6 @@ The app integrates with IoT devices to track feeding activities, provide data hi
 # 🚀 Features
 
 * 📊 **Feeding History Tracking** – Record and view your pet’s feeding times with timestamps.
-* 🔔 **Reminders & Notifications** – Get notified when it’s time to feed your pet.
 * 👨‍👩‍👧 **Multi-User Access** – Supports both **Admin** and **User** roles for easy management.
 * 🌐 **Real-Time IoT Integration** – Syncs with the pet feeder device to monitor feeding status.
 * 🔒 **Secure Login** – Password encryption, email verification, and password reset support.
@@ -88,5 +87,6 @@ flutter run
 * Special thanks to the Flutter and Firebase communities.
 
 ---
+
 
 
