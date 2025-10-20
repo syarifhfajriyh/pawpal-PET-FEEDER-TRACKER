@@ -1,3 +1,10 @@
+<p style="text-align:center;">
+  <img src="UTMLOGO.png" alt="UTM" style="width:280px; height:auto; margin:5px;">
+  <img src="PawpalLogo.png" alt="logopawpal" style="width:280px; height:auto; margin:5px;">
+</p>
+
+
+
 # 🐾 PetFeeder Installation Guide
 
 ## SECTION 01: OVERVIEW
@@ -9,6 +16,7 @@ The **PetFeeder** mobile application allows users to control and monitor their p
 - Android 8.0 or newer  
 - Minimum of 150 MB available storage  
 - Wi-Fi or mobile data connection
+
 
 ## SECTION 03: DOWNLOAD THE APPLICATION
 
@@ -93,10 +101,7 @@ You can now log in, connect your device, and manage your pet’s feeding schedul
 
 
 # link GITHUB
-[GitHub Repository](https://github.com/syarifhfajriyh/pawpal-PET-FEEDER-TRACKER.git)
-
-# link Website
-[]
+[GitHub PawPal PetFeeder](https://github.com/syarifhfajriyh/pawpal-PET-FEEDER-TRACKER.git)
 
 # List Of Username and Password
 
@@ -104,19 +109,32 @@ You can now log in, connect your device, and manage your pet’s feeding schedul
 
     Username : admin@gmail.com
 
-    Password : pass 123456
+    Password : 123456
 
 ## User1
 
     Username : ainaaahadi@gmail.com
 
-    Password : pass ainaa123
+    Password : ainaa123
 
  ## User2   
 
     Username : rigotochan@gmail.com
 
-    Password : pass ainaa123
+    Password : ainaa123
+
+ ## User3   
+
+    Username : adirantsh@gmail.com
+
+    Password : 123456
+
+## User4   
+
+    Username : syarifhsyed@gmail.com
+
+    Password : 123456
+
 
 
 
