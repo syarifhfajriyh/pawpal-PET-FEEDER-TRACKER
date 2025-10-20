@@ -1,92 +1,124 @@
-# 🐾 PawPal – Pet Feeder Tracker
+# 🐾 PetFeeder Installation Guide
 
-PawPal is a **smart pet feeder tracker** built with **Flutter**, designed to help pet owners monitor and manage their pet’s feeding schedules anytime, anywhere.
-The app integrates with IoT devices to track feeding activities, provide data history, and ensure pets are always fed on time.
+## SECTION 01: OVERVIEW
+The **PetFeeder** mobile application allows users to control and monitor their pet feeding system through an internet-connected Android device.
 
----
 
-# 🚀 Features
+## SECTION 02: SYSTEM REQUIREMENTS
+- Android smartphone or tablet  
+- Android 8.0 or newer  
+- Minimum of 150 MB available storage  
+- Wi-Fi or mobile data connection
 
-* 📊 **Feeding History Tracking** – Record and view your pet’s feeding times with timestamps.
-* 👨‍👩‍👧 **Multi-User Access** – Supports both **Admin** and **User** roles for easy management.
-* 🌐 **Real-Time IoT Integration** – Syncs with the pet feeder device to monitor feeding status.
-* 🔒 **Secure Login** – Password encryption, email verification, and password reset support.
-* 📱 **Friendly UI** – Simple, elegant, and mobile-friendly design.
+## SECTION 03: DOWNLOAD THE APPLICATION
 
----
+### Option A: Using a Computer
+1. Open the official GitHub repository on your computer:  
+   [https://github.com/syarifhfajriyh/pawpal-PET-FEEDER-TRACKER.git](https://github.com/syarifhfajriyh/pawpal-PET-FEEDER-TRACKER.git)
+2. Download the file named **PetFeeder.apk**.
+3. Transfer the file to your Android device using one of the following methods:
+   - USB cable  
+   - Bluetooth  
+   - Cloud storage (Google Drive or OneDrive)
 
-# 🛠️ Tech Stack
+### Option B: Using a Mobile Device
+1. Open a web browser on your Android device.  
+2. Visit the same GitHub repository.  
+3. Download the **PetFeeder.apk** file directly to your device.
 
-* **Frontend:** Flutter (Dart)
-* **Backend:** Firebase / SQL Database (depending on setup)
-* **Device Integration:** ESP32 / Raspberry Pi (IoT-enabled feeder)
-* **Authentication:** Firebase Auth / Email Verification
 
----
+## SECTION 04: INSTALLATION FROM UNKNOWN SOURCES
+Since the PetFeeder app is not from the Google Play Store, Android requires permission to install apps from external sources.
 
-# 📂 Project Structure
+### Follow these steps:
+1. Open **Settings** on your Android device.  
+2. Search for **Install Unknown Apps**.  
+3. From the list, select the app you’ll use to open the APK (e.g., File Manager, Chrome, or Drive).  
+4. Enable **Allow from this source**.
 
-```
-pawpal/
-│-- android/
-│-- ios/
-│-- lib/
-│   ├── main.dart
-│   ├── screens/
-│   ├── widgets/
-│   ├── models/
-│   └── services/
-│-- assets/
-│   ├── images/
-│   └── icons/
-│-- pubspec.yaml
-└── README.md
-```
+**Recommendation:**  
+Only enable this setting for trusted apps. You may disable it again after installation for security purposes.
 
----
 
-# ⚡ Getting Started
+## SECTION 05: INSTALLING THE APPLICATION
+1. Open your **File Manager** or the app used to download the file.  
+2. Locate **PetFeeder.apk**.  
+3. Tap the file to begin installation.  
+4. When prompted, tap **Install** to confirm.  
+5. If a message from **Google Play Protect** appears, tap the drop-down arrow and select **Install anyway**.  
+6. Wait for the installation to complete.  
+7. Once finished, tap **Open** to launch the app or **Done** to exit.
 
-### Prerequisites
 
-* [Flutter SDK](https://docs.flutter.dev/get-started/install)
-* Android Studio / VS Code with Flutter & Dart plugins
-* Connected device or emulator
+## SECTION 06: FIRST LAUNCH AND ACCOUNT SETUP
+1. Launch the **PetFeeder** app from your home screen or app drawer.  
+2. Allow all required permissions.  
+3. On the login screen, tap **Sign Up** if you don’t have an account.  
+4. Enter a valid email and a password (minimum 6 characters).  
+5. A verification email will be sent to your registered email.  
+6. Check your inbox (and **Spam/Junk** folder if necessary).  
+7. Click the verification link to activate your account.  
+8. Return to the app and log in with your verified credentials.
 
-### Installation
 
-```bash
-# Clone this repository
-git clone https://github.com/bibekkakati/pawfeeder-flutter.git
+## SECTION 07: TROUBLESHOOTING
 
-# Navigate to project directory
-cd pawpal
+**Issue:** Installation blocked  
+**Cause:** “Install unknown apps” not enabled  
+**Solution:** Follow Section 04 to enable installation from unknown sources.
 
-# Get dependencies
-flutter pub get
+**Issue:** “App not installed” message  
+**Cause:** Corrupted or incomplete APK file  
+**Solution:** Re-download the APK file from GitHub.
 
-# Run the app
-flutter run
-```
+**Issue:** Verification email not received  
+**Cause:** Email filtered to spam  
+**Solution:** Check Spam or Junk folder.
 
----
+**Issue:** App does not open after installation  
+**Cause:** Missing permissions or outdated OS  
+**Solution:** Allow permissions or update your Android system.
 
-## 🤝 Contributing
 
-1. Fork the project
-2. Create a new branch (`git checkout -b feature-branch`)
-3. Commit changes (`git commit -m 'Add new feature'`)
-4. Push to branch (`git push origin feature-branch`)
-5. Open a Pull Request
+## SECTION 08: SAFETY NOTES
+1. The PetFeeder app is verified and safe for internal testing.  
+2. Always download the APK file from the official GitHub repository:  
+   [https://github.com/syarifhfajriyh/pawpal-PET-FEEDER-TRACKER.git](https://github.com/syarifhfajriyh/pawpal-PET-FEEDER-TRACKER.git)  
+3. Disable **Allow from this source** after installation for improved security.
 
----
 
-## 💡 Acknowledgements
+## SECTION 09: COMPLETION
+After completing installation and account setup, the **PetFeeder** app is ready to use.  
+You can now log in, connect your device, and manage your pet’s feeding schedule remotely and efficiently.
 
-* IoT integration inspired by community projects.
-* Special thanks to the Flutter and Firebase communities.
 
----
+# link GITHUB
+[GitHub Repository](https://github.com/syarifhfajriyh/pawpal-PET-FEEDER-TRACKER.git)
+
+# link Website
+[]
+
+# List Of Username and Password
+
+## Admin 
+
+    Username : admin@gmail.com
+
+    Password : pass 123456
+
+## User1
+
+    Username : ainaaahadi@gmail.com
+
+    Password : pass ainaa123
+
+ ## User2   
+
+    Username : rigotochan@gmail.com
+
+    Password : pass ainaa123
+
+
 
 
 
