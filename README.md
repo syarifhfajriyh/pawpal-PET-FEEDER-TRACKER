@@ -128,15 +128,12 @@ Username : ainaaahadi@gmail.com
 Password : ainaa123 
 
 ## User2 
-Username : rigotochan@gmail.com 
-Password : ainaa123 
-
-## User3 
 Username : adirantsh@gmail.com 
 Password : 123456 
 
-## User4 
+## User3 
 Username : syarifhsyed@gmail.com 
 Password : 123456
+
 
 
