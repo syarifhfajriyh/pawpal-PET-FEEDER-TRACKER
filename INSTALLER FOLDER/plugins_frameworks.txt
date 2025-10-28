@@ -2,42 +2,48 @@ PawPal Pet Feeder Tracker
 Plugins & Frameworks Information
 
 ----------------------------------------
-Frameworks
+Frameworks / Tooling
 ----------------------------------------
-- Flutter 3.32.8 (Stable)
-- Dart 3.8.1
-- Firebase (Realtime Database, Authentication, Storage)
-- ESP32 Arduino Core 3.0.7 (for IoT integration)
-- Android Studio 2024.2 (Koala)
-- Java 17
-- Gradle 8.6
+- Flutter (use installed version)
+- Dart SDK constraint: ^3.7.0
+- Firebase Stack: Core, Authentication, Cloud Firestore, Cloud Functions, Realtime Database, Storage
+- Background & Notifications: WorkManager, Flutter Local Notifications, Timezone
+- Android tooling: Android Studio + Gradle
+- Target Platform: Android
 
 ----------------------------------------
-Flutter Plugins Used
+Flutter Plugins (pubspec.yaml)
 ----------------------------------------
-firebase_core: ^3.6.0
-firebase_database: ^11.0.4
-firebase_auth: ^5.3.1
-firebase_storage: ^12.2.3
-flutter_local_notifications: ^17.2.3
-provider: ^6.1.2
-http: ^1.2.2
-shared_preferences: ^2.3.2
-intl: ^0.19.0
-path_provider: ^2.1.4
-timezone: ^0.9.3
+firebase_core: ^3.15.2
+firebase_auth: ^5.7.0
+cloud_firestore: ^5.6.12
+cloud_functions: ^5.6.2
+firebase_database: ^11.3.10
+firebase_storage: 12.4.10
+flutter_local_notifications: 16.3.3
+timezone: 0.9.0
+workmanager: ^0.9.0+3
+provider: ^6.1.5+1
+google_fonts: ^5.1.0
+cached_network_image: ^3.3.0
+image_picker: ^1.1.2
+permission_handler: ^11.0.1
+percent_indicator: ^4.2.3
+cupertino_icons: ^1.0.8
 
 ----------------------------------------
-Development Environment
+Notes
 ----------------------------------------
-- Windows 11
-- Flutter SDK path: C:\FLUTTER\flutter
-- Android SDK integrated with Android Studio
-- ESP32 Board connected via Arduino IDE (v2.x)
-- Firebase Console linked via Google Services JSON
+- APK is hosted on Google Drive:
+  [Insert your Google Drive link here]
+
+- Android 13+ may prompt for notifications permission due to flutter_local_notifications.
+- Workmanager runs background tasks; battery optimizations may need to be disabled on some devices.
 
 ----------------------------------------
-Installer Information
+Build From Source (summary)
 ----------------------------------------
-The Android .apk installer is available via Google Drive:
-https://drive.google.com/file/d/1_HT2-2crr5CLV2QiH7x-3A4Y5IdKjWFF/view?usp=drive_link
+1) Install Flutter & Android Studio; set up Android SDK.
+2) Add google-services.json under android/app/.
+3) flutter pub get
+4) flutter build apk --release --split-per-abi --tree-shake-icons
