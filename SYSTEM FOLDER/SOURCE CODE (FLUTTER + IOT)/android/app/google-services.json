@@ -1,0 +1,49 @@
+{
+  "project_info": {
+    "project_number": "102533155505",
+    "firebase_url": "https://petfeeder1-713c0-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "petfeeder1-713c0",
+    "storage_bucket": "petfeeder1-713c0.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:102533155505:android:719b57872b7845feaf3090",
+        "android_client_info": {
+          "package_name": "com.example.petfood1"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAws4uB_zbmtUNXu3GQh7b-XUZVPfv2qoc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:102533155505:android:b50902b3283901d6af3090",
+        "android_client_info": {
+          "package_name": "com.petfeeder.my"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAws4uB_zbmtUNXu3GQh7b-XUZVPfv2qoc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
