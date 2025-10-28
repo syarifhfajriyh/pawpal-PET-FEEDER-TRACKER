@@ -1,0 +1,43 @@
+PawPal Pet Feeder Tracker
+Plugins & Frameworks Information
+
+----------------------------------------
+Frameworks
+----------------------------------------
+- Flutter 3.32.8 (Stable)
+- Dart 3.8.1
+- Firebase (Realtime Database, Authentication, Storage)
+- ESP32 Arduino Core 3.0.7 (for IoT integration)
+- Android Studio 2024.2 (Koala)
+- Java 17
+- Gradle 8.6
+
+----------------------------------------
+Flutter Plugins Used
+----------------------------------------
+firebase_core: ^3.6.0
+firebase_database: ^11.0.4
+firebase_auth: ^5.3.1
+firebase_storage: ^12.2.3
+flutter_local_notifications: ^17.2.3
+provider: ^6.1.2
+http: ^1.2.2
+shared_preferences: ^2.3.2
+intl: ^0.19.0
+path_provider: ^2.1.4
+timezone: ^0.9.3
+
+----------------------------------------
+Development Environment
+----------------------------------------
+- Windows 11
+- Flutter SDK path: C:\FLUTTER\flutter
+- Android SDK integrated with Android Studio
+- ESP32 Board connected via Arduino IDE (v2.x)
+- Firebase Console linked via Google Services JSON
+
+----------------------------------------
+Installer Information
+----------------------------------------
+The Android .apk installer is available via Google Drive:
+[Insert your Google Drive link here]
