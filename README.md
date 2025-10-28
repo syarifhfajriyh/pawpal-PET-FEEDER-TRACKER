@@ -120,9 +120,23 @@ You can now log in, connect your IoT feeder device, and manage your pet’s feed
 # 👥 List Of Username and Password
 
 # List Of Username and Password 
-## Admin Username : admin@gmail.com Password : 123456 
-## User1 Username : ainaaahadi@gmail.com Password : ainaa123 
-## User2 Username : rigotochan@gmail.com Password : ainaa123 
-## User3 Username : adirantsh@gmail.com Password : 123456 
-## User4 Username : syarifhsyed@gmail.com Password : 123456 
+## Admin 
+Username : admin@gmail.com 
+Password : 123456 
+
+## User1 
+Username : ainaaahadi@gmail.com 
+Password : ainaa123 
+
+## User2 
+Username : rigotochan@gmail.com 
+Password : ainaa123 
+
+## User3 
+Username : adirantsh@gmail.com 
+Password : 123456 
+
+## User4 
+Username : syarifhsyed@gmail.com 
+Password : 123456
 
