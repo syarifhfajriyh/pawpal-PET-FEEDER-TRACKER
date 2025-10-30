@@ -1,11 +1,3 @@
-/*
-   --------------------------------------------------------------
-   Pet Feeder Project Code - Protected by Warranty
-   Created by: MUMU SERVICE CENTRE
-   Contact: 0108204341
-   Date: 22 - 09 - 2025
-   Note: This watermark acts as a warranty seal for the project.
-         Removing or altering this comment will void the warranty.
 
    Library Used:
       1. WiFi.h by Arduino
