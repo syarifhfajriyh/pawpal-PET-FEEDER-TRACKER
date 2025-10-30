@@ -35,7 +35,7 @@ cupertino_icons: ^1.0.8
 Notes
 ----------------------------------------
 - APK is hosted on Google Drive:
-  https://drive.google.com/file/d/1_HT2-2crr5CLV2QiH7x-3A4Y5IdKjWFF/view?usp=drive_link
+  https://drive.google.com/file/d/1CJFsjzegoILMD9pr9XANNquzalNpPFV0/view?usp=drive_link
 
 - Android 13+ may prompt for notifications permission due to flutter_local_notifications.
 - Workmanager runs background tasks; battery optimizations may need to be disabled on some devices.
